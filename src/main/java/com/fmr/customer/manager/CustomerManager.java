@@ -2,6 +2,7 @@ package com.fmr.customer.manager;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fmr.customer.mapper.CustomerMapper;
@@ -9,11 +10,10 @@ import com.fmr.customer.model.Customer;
 
 @Component
 public class CustomerManager {
+	@Autowired
 	 private CustomerMapper customerMapper;
 	 
-	 public CustomerManager(CustomerMapper customerMapper) {
-		 this.customerMapper=customerMapper;
-	 }
+	 
 	 public List<Customer> findAll(){
 		 return customerMapper.findAll();
 	 }

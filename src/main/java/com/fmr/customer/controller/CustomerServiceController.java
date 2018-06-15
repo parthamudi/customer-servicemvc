@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import com.fmr.customer.dto.CustomerDTO;
 import com.fmr.customer.manager.CustomerManager;
 import com.fmr.customer.model.Customer;
@@ -23,24 +26,32 @@ import com.fmr.customer.model.Customer;
 
 
 @RestController
-@RequestMapping("/v1/customers")
+
 public class CustomerServiceController {
-@Autowired
+	@Autowired
     private CustomerManager customerManager;
 
    private static ModelMapper mapper=new ModelMapper();
     
     @RequestMapping(value = "/getAllCustomers/", method = RequestMethod.GET)
-    public ResponseEntity<List<CustomerDTO>> listAllCustomers() {
+    public  @ResponseBody List<CustomerDTO> listAllCustomers() {
         List<Customer> customers = customerManager.findAll();
         List<CustomerDTO> customersdto=(List<CustomerDTO>) mapper.map(customers,CustomerDTO.class);
-        if (customers.isEmpty()) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<CustomerDTO>>(customersdto, HttpStatus.OK);
+        return customersdto;
+//        if (customers.isEmpty()) {
+//           // return new ResponseEntity(HttpStatus.NO_CONTENT);
+//        }
+       // return new ResponseEntity<List<CustomerDTO>>(customersdto, HttpStatus.OK);
     }
  
- 
+    @RequestMapping(value="/greet/{name}",method=RequestMethod.GET)    
+    public String greet(@PathVariable String name, ModelMap model){
+        String greet =" Hello !!!" + name + " How are You?";
+        model.addAttribute("greet", greet);
+        System.out.println(greet);
+        
+        return "greet";
+    }
     @RequestMapping(value = "/getCustomer/{ssn}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomer(@PathVariable("ssn") long ssn) {
         Customer customer = customerManager.getCustomerBySSN(ssn);

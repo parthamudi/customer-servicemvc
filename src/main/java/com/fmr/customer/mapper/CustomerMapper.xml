@@ -10,7 +10,7 @@
 <result property = "dob" column = "dob"/>
 <result property = "gender" column = "gender"/>
 </resultMap>
-<cache type="org.mybatis.caches.ignite.IgniteCacheAdapter" flushInterval="200" />
+<!-- <cache type="org.mybatis.caches.ignite.IgniteCacheAdapter" flushInterval="200" /> -->
 <select id="findAll" resultMap="customer" useCache="true">
 select ssn,dirst_name,last_name,dob,gender from customer
 </select>
